@@ -1,4 +1,4 @@
-
+# making the changes as mentioned in the experiment branch 
 # adding the code of class assignment  2 q1 
 import torch
 
@@ -11,16 +11,19 @@ from torch.utils.tensorboard import SummaryWriter
 
 defining the required MLP model
 
+# Modify MLP model architecture
 class MY_MLP(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(MY_MLP, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, num_classes)
+        self.fc2 = nn.Linear(hidden_size, hidden_size)  # Adding another hidden layer
+        self.fc3 = nn.Linear(hidden_size, num_classes)  # Adjusting output layer
 
     def forward(self, x):
         x = torch.flatten(x, 1)
         x = torch.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = torch.relu(self.fc2(x))  # Apply activation function for the new layer
+        x = self.fc3(x)
         return x
 
 defining the required CNN Architectre for solving the problem
@@ -98,8 +101,11 @@ my_cnn_model = CNN_Architecture(num_classes)
 defining loss function and optimizers
 
 criterion = nn.CrossEntropyLoss()
-my_mlp_optimizer = optim.Adam(my_mlp_model.parameters(), lr=0.001)
-my_cnn_optimizer = optim.Adam(my_cnn_model.parameters(), lr=0.001)
+# changing the learning rate for optimizers
+
+my_mlp_optimizer = optim.Adam(my_mlp_model.parameters(), lr=0.0005)
+my_cnn_optimizer = optim.Adam(my_cnn_model.parameters(), lr=0.0005)
+
 
 intializing tensorboard writer
 
